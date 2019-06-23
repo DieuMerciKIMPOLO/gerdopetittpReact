@@ -3,11 +3,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import SlideShow from './SlideShow';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import MediaCard from './MediaCard';
 
 import {
     Collapse,
@@ -21,8 +16,10 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem } from 'reactstrap';
+import SlideShow from './SlideShow';
+import { Grid } from '@material-ui/core';
     
-class Presentation extends React.Component{
+class Connexion extends React.Component{
     constructor(props){
         super(props);
         this.state={
@@ -82,28 +79,36 @@ class Presentation extends React.Component{
           </Navbar>
           <Container fixed>
           <Grid container>
-            <Grid item xs={12}>
-            <SlideShow/>
-            </Grid>
-            </Grid>
-            <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo tellus et auctor rhoncus. Pellentesque in mollis eros. Integer maximus condimentum neque, eget sagittis libero molestie ut. Nulla tempus accumsan nulla nec hendrerit. Aenean volutpat dolor at nisl euismod, eu bibendum est lacinia. Quisque in ultrices est. Mauris sit amet accumsan nibh, sed eleifend nunc.
-              </p>
-              <p>
-              Phasellus sodales justo id venenatis scelerisque. Sed non laoreet libero, et feugiat neque. Etiam finibus egestas quam, fringilla maximus nisi venenatis ut. Aliquam elementum blandit ligula et convallis. In convallis interdum urna, at aliquam urna efficitur nec. Morbi sed luctus nisl, ac efficitur turpis. Cras aliquet orci sit amet lacinia blandit. Morbi aliquet mi velit, at porttitor lacus volutpat id. Mauris gravida lacinia lectus malesuada volutpat. Pellentesque ornare tristique quam, aliquet pretium quam facilisis et. Sed tincidunt vel dui sed accumsan.
-              </p>
-              <p>
-              5 paragraphes, 394 mots, 2687 caractères de Lorem Ipsum généré
-              </p>
-            </Grid>
-            <Grid item xs={6}>
-            <MediaCard paramettreGerdo="Je suis Gerdo"/>
-            </Grid>
-            <Grid item xs={12}>
-            <MediaCard paramettreGerdo="Je suis Gerdo Ngondo"/>
-            </Grid>
+          <Grid item xs={12}>
+          <SlideShow/>
           </Grid>
+          </Grid>
+        <div className="card">
+            <div className="card-header">
+                Featured
+            </div>
+            <div className="card-body">
+            <form>
+            <div className="form-group row">
+              <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+              <div className="col-sm-10">
+                <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+              </div>
+            </div>
+            <div className="form-group row">
+            <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+            <div className="col-sm-10">
+              <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+            </div>
+          </div>
+            <div className="form-group row">
+              <div className="col-sm-10">
+                <button type="submit" className="btn btn-primary">Sign in</button>
+              </div>
+            </div>
+          </form>
+            </div>
+            </div>
           </Container>
           <AppBar position="static" color="primary">
             <Toolbar>
@@ -115,6 +120,6 @@ class Presentation extends React.Component{
         )
     }
 }
-export default Presentation;
+export default Connexion;
 
 
