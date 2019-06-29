@@ -39,8 +39,10 @@ class Presentation extends React.Component{
     connexion(facebook){
        if(facebook==='facebook'){
          var provider= new firebase.auth.FacebookAuthProvider();
-       }else{
+       }else if(facebook=='twitter'){
         var provider= new firebase.auth.TwitterAuthProvider();
+       }else{
+        var provider = new firebase.auth.GoogleAuthProvider();
        }
        
        firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -156,6 +158,7 @@ class Presentation extends React.Component{
              </table>
              <button onClick={()=>this.connexion('facebook')}>Facebook</button>
              <button onClick={()=>this.connexion('twitter')}>Twitter</button>
+             <button onClick={()=>this.connexion('google')}>Google</button>
             <MediaCard paramettreGerdo="Je suis Gerdo"/>
             </Grid>
             <Grid item xs={12}>
