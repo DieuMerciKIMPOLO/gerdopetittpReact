@@ -8,7 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import MediaCard from './MediaCard';
-
+import config from '../config';
+import * as firebase from 'firebase';
 import {
     Collapse,
     Navbar,
@@ -27,16 +28,59 @@ class Presentation extends React.Component{
         super(props);
         this.state={
             nom:1,
-            prenom:0
-        }
+            prenom:0,
+            personnages:{}
+        };
+        firebase.initializeApp(config)
         this.ChangerNom=this.ChangerNom.bind(this);
         this.ChangerPreNom=this.ChangerPreNom.bind(this);
+        this.connexion=this.connexion.bind(this)
+    }
+    connexion(facebook){
+       if(facebook==='facebook'){
+         var provider= new firebase.auth.FacebookAuthProvider();
+       }else{
+        var provider= new firebase.auth.TwitterAuthProvider();
+       }
+       
+       firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        console.log(user)
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        console.log(errorMessage)
+        // ...
+      });
     }
     ChangerNom(){
         this.setState({nom:this.state.nom+5})
     }
     ChangerPreNom(){
         this.setState({prenom:this.state.prenom+15})
+    }
+    componentDidMount(){
+      const ref = firebase.database().ref('personnages');
+      const insertV=firebase.database().ref('personnages').push();
+      insertV.set(
+        {
+          nom:"Mabiala",
+          prenom:"Julia"
+        }
+      )
+      ref.on('value',snapshot =>{
+        this.setState({personnages:snapshot.val()})
+        console.log(snapshot.val())
+      });
     }
     render(){
         const {classes}={}
@@ -98,6 +142,20 @@ class Presentation extends React.Component{
               </p>
             </Grid>
             <Grid item xs={6}>
+            <table>
+              {
+                Object.keys(this.state.personnages).map((item)=>{
+                  return(
+                    <tr>
+                        <td>{this.state.personnages[item].nom}</td>
+                        <td>{this.state.personnages[item].prenom}</td>
+                    </tr>
+                    )
+                })
+              }
+             </table>
+             <button onClick={()=>this.connexion('facebook')}>Facebook</button>
+             <button onClick={()=>this.connexion('twitter')}>Twitter</button>
             <MediaCard paramettreGerdo="Je suis Gerdo"/>
             </Grid>
             <Grid item xs={12}>
