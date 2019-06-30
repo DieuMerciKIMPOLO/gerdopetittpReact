@@ -3,80 +3,60 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem } from 'reactstrap';
 import SlideShow from './SlideShow';
 import { Grid } from '@material-ui/core';
-    
+import NavbarComponent from '../headers/NavbarComponent';
+import FooterComponent from './footer/FooterComponent';
+import config from '../config';
+import * as firebase from 'firebase';
+
 class Inscription extends React.Component{
     constructor(props){
         super(props);
+        firebase.initializeApp(config)
         this.state={
-            nom:1,
-            prenom:0
+            inscription:{
+              nom:'',
+              prenom:'',
+              adresse:'',
+              filiere:'',
+              annee:'',
+            }
         }
-        this.ChangerNom=this.ChangerNom.bind(this);
-        this.ChangerPreNom=this.ChangerPreNom.bind(this);
+        this.soumettreLeFormulaire=this.soumettreLeFormulaire.bind(this);
+        this.detecterLeChangement=this.detecterLeChangement.bind(this);
     }
-    ChangerNom(){
-        this.setState({nom:this.state.nom+5})
+    soumettreLeFormulaire(){
+      // alert("Le formulaire vient d' etre soumis!")
+      console.log(this.state.inscription)
     }
-    ChangerPreNom(){
-        this.setState({prenom:this.state.prenom+15})
+
+    detecterLeChangement(e,nom){
+      var data=this.state.inscription;
+      if(nom==='nom'){
+        data['nom']=e.target.value;
+      }else if(nom==='prenom'){
+        data['prenom']=e.target.value;        
+      }else if(nom==='filiere'){
+        data['filiere']=e.target.value;
+      }else if(nom==='annee'){
+        data['annee']=e.target.value;
+      }else if(nom==='adresse'){
+        data['adresse']=e.target.value;
+      }
+      this.setState({inscription:data});
+      // console.log(e.target.value,nom)
+    }
+    componentDidMount(){
+      const ref = firebase.database().ref('personnages');
+      const insertV=firebase.database().ref('personnages').push();
+      insertV.set({nom:"Mabiala",prenom:"Julia"});
     }
     render(){
         const {classes}={}
         return(
           <e>
-          <AppBar position="static" color="primary">
-              <Toolbar>
-              <Typography variant="h6" color="inherit">
-              TP.Js
-              </Typography>
-              </Toolbar>
-          </AppBar>
-          <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-              </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Option 1
-                  </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    Reset
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
-          </Collapse>
-          </Navbar>
+           <NavbarComponent/>
           <Container fixed>
           <Grid container>
           <Grid item xs={12}>
@@ -85,104 +65,62 @@ class Inscription extends React.Component{
           </Grid>
         <div className="card">
             <div className="card-header">
-                Featured
+                INSCRIPTION
             </div>
             <div className="card-body">
             <form>
             <div className="form-group row">
-              <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+              <label for="inputEmail3" className="col-sm-2 col-form-label">Nom</label>
               <div className="col-sm-10">
-                <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+                <input type="email" className="form-control" id="inputEmail3" placeholder="Votre nom" onChange={(e)=>this.detecterLeChangement(e,'nom')}/>
               </div>
             </div>
             <div className="form-group row">
-            <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+            <label for="inputEmail3" className="col-sm-2 col-form-label">Prenom(s)</label>
             <div className="col-sm-10">
-              <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+              <input type="email" className="form-control" id="inputEmail3" placeholder="Votre prenom" onChange={(e)=>this.detecterLeChangement(e,'prenom')}/>
             </div>
           </div>
           <div className="form-group row">
-          <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+          <label for="inputEmail3" className="col-sm-2 col-form-label">Votre adresse</label>
           <div className="col-sm-10">
-            <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+            <input type="email" className="form-control" id="inputEmail3" placeholder="Votre adresse" onChange={(e)=>this.detecterLeChangement(e,'adresse')}/>
           </div>
         </div>
         <div className="form-group row">
-        <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+        <label for="inputEmail3" className="col-sm-2 col-form-label">Filiere</label>
         <div className="col-sm-10">
-          <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+          <select type="email" className="form-control" id="inputEmail3" placeholder="Votre Filiere" onChange={(e)=>this.detecterLeChangement(e,'filiere')}>
+              <option>F1</option>
+              <option>F2</option>
+              <option>F3</option>
+              <option>F4</option>
+          </select>
         </div>
       </div>
       <div className="form-group row">
-      <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
+      <label for="inputEmail3" className="col-sm-2 col-form-label">Annee</label>
       <div className="col-sm-10">
-        <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+        <select type="email" className="form-control" id="inputEmail3" placeholder="Votre annee" onChange={(e)=>this.detecterLeChangement(e,'annee')}>
+        <option>Premiere</option>
+        <option>Deuxieme</option>
+        <option>Troisieme</option>
+        <option>Quatrieme</option>
+        <option>Cinquieme</option>
+        </select>
       </div>
     </div>
     <div className="form-group row">
-    <label for="inputEmail3" className="col-sm-2 col-form-label">Email</label>
-    <div className="col-sm-10">
-      <input type="email" className="form-control" id="inputEmail3" placeholder="Email"/>
+      <div className="col-sm-10">
+        <button type="submit" className="btn btn-primary" onClick={()=>this.soumettreLeFormulaire()}>Enregistrer</button>
+      </div>
     </div>
-  </div>
-            <div className="form-group row">
-              <label for="inputPassword3" className="col-sm-2 col-form-label">Password</label>
-              <div className="col-sm-10">
-                <input type="password" className="form-control" id="inputPassword3" placeholder="Password"/>
-              </div>
-            </div>
-            <fieldset className="form-group">
-              <div className="row">
-                <legend className="col-form-label col-sm-2 pt-0">Radios</legend>
-                <div className="col-sm-10">
-                  <div className="form-check">
-                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked/>
-                    <label className="form-check-label" for="gridRadios1">
-                      First radio
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"/>
-                    <label className="form-check-label" for="gridRadios2">
-                      Second radio
-                    </label>
-                  </div>
-                  <div className="form-check disabled">
-                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled/>
-                    <label className="form-check-label" for="gridRadios3">
-                      Third disabled radio
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-            <div className="form-group row">
-              <div className="col-sm-2">Checkbox</div>
-              <div className="col-sm-10">
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" id="gridCheck1"/>
-                  <label className="form-check-label" for="gridCheck1">
-                    Example checkbox
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="form-group row">
-              <div className="col-sm-10">
-                <button type="submit" className="btn btn-primary">Sign in</button>
-              </div>
-            </div>
-          </form>
-            </div>
-            </div>
-          </Container>
-          <AppBar position="static" color="primary">
-            <Toolbar>
-            <Typography variant="h6" color="inherit">
-            </Typography>
-            </Toolbar>
-          </AppBar>
-          </e>
+    </form>
+      </div>
+      </div>
+    </Container>
+    <FooterComponent/>
+    </e>
         )
     }
 }

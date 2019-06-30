@@ -93,6 +93,21 @@ class Presentation extends React.Component{
               </p>
             </Grid>
             <Grid item xs={6}>
+            <table>
+              {
+                Object.keys(this.state.personnages).map((item)=>{
+                  return(
+                    <tr>
+                        <td>{this.state.personnages[item].nom}</td>
+                        <td>{this.state.personnages[item].prenom}</td>
+                    </tr>
+                    )
+                })
+              }
+             </table>
+             <button onClick={()=>this.connexion('facebook')}>Facebook</button>
+             <button onClick={()=>this.connexion('twitter')}>Twitter</button>
+             <button onClick={()=>this.connexion('google')}>Google</button>
             <MediaCard paramettreGerdo="Je suis Gerdo"/>
             </Grid>
             <Grid item xs={12}>
